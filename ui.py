@@ -25,11 +25,17 @@ def generate_table(status):
     net_in_bar = "[aquamarine1]" + "▶" * min(int(net_in_kb / 500), 20) + "[/aquamarine1]"
     table.add_row("Net Download", status['net_in'], net_in_bar)
     
-    # 5. Net Upload
+    # [신규 추가] 총 다운로드 누적량 표시
+    table.add_row(" └ Total Rx", status['total_in'], "", style="dim")
+
+    # 5. Net Upload (실시간 속도)
     net_out_kb = float(status['net_out'].split()[0])
     net_out_bar = "[orange1]" + "◀" * min(int(net_out_kb / 500), 20) + "[/orange1]"
     table.add_row("Net Upload", status['net_out'], net_out_bar)
-    
+
+    # [신규 추가] 총 업로드 누적량 표시
+    table.add_row(" └ Total Tx", status['total_out'], "", style="dim")
+
     # 6. System Boot
     table.add_row("System Boot", status['boot_time'], "")
 

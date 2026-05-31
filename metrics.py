@@ -26,6 +26,11 @@ def get_system_status(last_net_in, last_net_out, last_time):
     boot_time = datetime.fromtimestamp(psutil.boot_time()).strftime("%Y-%m-%d %H:%M:%S")
     
     net_io = psutil.net_io_counters()
+
+    # [신규 추가] 부팅 이후 총 누적 다운로드/업로드 용량 계산 (Byte -> GB 환산)
+    total_downloaded_gb = net_io.bytes_recv / (1024**3)
+    total_uploaded_gb = net_io.bytes_sent / (1024**3)    
+
     current_time = time.time()
     time_delta = current_time - last_time
     if time_delta == 0:  
@@ -45,6 +50,8 @@ def get_system_status(last_net_in, last_net_out, last_time):
         "boot_time": boot_time,
         "net_in": f"{net_in_speed:.1f} KB/s",
         "net_out": f"{net_out_speed:.1f} KB/s",
+        "total_in": f"{total_downloaded_gb:.2f} GB",
+        "total_out": f"{total_uploaded_gb:.2f} GB",
         "top_processes": top_proc,
         "raw_net_in": net_io.bytes_recv,
         "raw_net_out": net_io.bytes_sent,
